@@ -1,3 +1,14 @@
+def average(list):
+    s = 0
+    c = 0
+    for i in list.values():  # считаем среднее арифметическое оценок по всем курсам
+        for j in i:
+            s += int(j)
+            c += 1
+    s = s / c
+    return s
+
+
 class Student:
     def __init__(self, name, surname, gender):
         self.name = name
@@ -20,6 +31,14 @@ class Student:
         else:
             return 'Ошибка'
 
+    def __str__(self):
+        res = f'Имя: {self.name}\n' \
+             f'Фамилия: {self.surname}\n' \
+             f'Средняя оценка за домашние задания: {average(self.grades)}\n' \
+             f'Курсы в процессе изучения: {", ".join(self.courses_in_progress)}\n' \
+             f'Завершенные курсы: {", ".join(self.finished_courses)}  '
+        return res
+
 
 class Mentor:
     def __init__(self, name, surname):
@@ -35,6 +54,12 @@ class Lecturer(Mentor):
         super().__init__(name, surname)
         self.grades = {}
 
+    def __str__(self):
+        res = f'Имя: {self.name}\n' \
+              f'Фамилия: {self.surname}\n' \
+              f'Средняя оценка за лекции: {average(self.grades)} '
+        return res
+
 
 class Reviewer(Mentor):
     
@@ -47,7 +72,15 @@ class Reviewer(Mentor):
                 student.grades[course] = [grade]
         else:
             return 'Ошибка'
+    
+    def __str__(self):
+        res = f'Имя: {self.name}\n' \
+              f'Фамилия: {self.surname}'
+        return res
 
+
+some_reviewer = Reviewer('Bob', 'Hoskins')
+print(some_reviewer)
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
 best_student.finished_courses += ['Git']
@@ -68,6 +101,7 @@ cool_lector.courses_attached += ['GIT']
 print(cool_lector.courses_attached)
 best_student.rate_lecturer(cool_lector, 'GIT', 8) # выставляем оценку лектору
 print(cool_lector.grades) # проверяем
+print(cool_lector)
 
 cool_reviewer.rate_hw(best_student, 'Python', 10) # ставим оценку студенту
 # cool_mentor.rate_hw(best_student, 'Python', 20)
@@ -75,3 +109,4 @@ cool_reviewer.rate_hw(best_student, 'Python', 10) # ставим оценку с
 # cool_mentor.rate_hw(best_student, 'GIT', 10)
 #
 print(best_student.grades)
+print(best_student)
