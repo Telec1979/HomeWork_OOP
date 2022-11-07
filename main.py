@@ -91,7 +91,34 @@ class Reviewer(Mentor):
         return res
 
 
+def rate_student_by_course(student_list, course_name):
+    res = 0
+    count = 0
+    for st in student_list:
+        if course_name in st.grades.keys():
+            res += sum(st.grades[course_name])
+            count += len(st.grades[course_name])
+    if count != 0:
+        print(f'Средняя оценка  студентов по курсу {course_name} составляет {round(res/count, 2)}')
+    else:
+        print(f'Оценок по курсу {course_name} не выставлялось ')
+
+
+def rate_lector_by_course(lector_list, course_name):
+    res = 0
+    count = 0
+    for lt in lector_list:
+        if course_name in lt.grades.keys():
+            res += sum(lt.grades[course_name])
+            count += len(lt.grades[course_name])
+    if count != 0:
+        print(f'Средняя оценка  преподавателей по курсу {course_name} составляет {round(res / count, 2)}')
+    else:
+        print(f'{course_name} никто не оценил!')
+
+
 some_reviewer = Reviewer('Adrian', 'Paul')
+some_reviewer.courses_attached += ['Pascal']
 print(some_reviewer)
 
 student_one = Student('Germiona', 'Granger', 'femail')
@@ -100,6 +127,7 @@ student_one.courses_in_progress += ['Python', 'Pascal']
 student_one.add_courses('OOP')
 student_one.grades['Git'] = [10, 20, 30, 40, 10]
 student_one.grades['Python'] = [30, 30]
+some_reviewer.rate_hw(student_one, 'Pascal', 7)
 print(student_one)
 
 student_two = Student('Boby', 'Fisher', 'male')
@@ -109,6 +137,8 @@ student_two.add_courses('OOP')
 student_two.grades['Git'] = [10, 20, 30, 40, 50]
 student_two.grades['Python'] = [10, 30]
 print(student_two)
+
+rate_student_by_course([student_one, student_two], 'Git')
 
 if student_one.__lt__(student_two):
     print(f'{student_two.name} {student_two.surname} лучший!\n')
@@ -134,6 +164,8 @@ student_two.rate_lecturer(lecturer_two, 'Python', 13)
 student_two.rate_lecturer(lecturer_two, 'Pascal', 5)
 # print(lecturer_two.grades)
 print(lecturer_two)
+
+rate_lector_by_course([lecturer_one, lecturer_two], 'Python')
 
 if lecturer_one.__lt__(lecturer_two):
     print(f'{lecturer_two.name} {lecturer_two.surname} лучший!\n')
