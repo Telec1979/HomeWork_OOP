@@ -34,10 +34,16 @@ class Student:
     def __str__(self):
         res = f'Имя: {self.name}\n' \
              f'Фамилия: {self.surname}\n' \
-             f'Средняя оценка за домашние задания: {average(self.grades)}\n' \
+             f'Средняя оценка за домашние задания: {round(average(self.grades), 2)}\n' \
              f'Курсы в процессе изучения: {", ".join(self.courses_in_progress)}\n' \
-             f'Завершенные курсы: {", ".join(self.finished_courses)}  '
+             f'Завершенные курсы: {", ".join(self.finished_courses)}  \n'
         return res
+
+    def __lt__(self, other):  # сравниваем студентов по средним оценкам
+        if not isinstance(other, Student):
+            print('Not a student!')
+            return
+        return average(self.grades) < average(other.grades)
 
 
 class Mentor:
@@ -57,8 +63,14 @@ class Lecturer(Mentor):
     def __str__(self):
         res = f'Имя: {self.name}\n' \
               f'Фамилия: {self.surname}\n' \
-              f'Средняя оценка за лекции: {average(self.grades)} '
+              f'Средняя оценка за лекции: {round(average(self.grades), 2)} \n'
         return res
+
+    def __lt__(self, other):  # сравниваем лекторов по средней оценке
+        if not isinstance(other, Lecturer):
+            print('Not a Lecturer!')
+            return
+        return average(self.grades) < average(other.grades)
 
 
 class Reviewer(Mentor):
@@ -75,38 +87,55 @@ class Reviewer(Mentor):
     
     def __str__(self):
         res = f'Имя: {self.name}\n' \
-              f'Фамилия: {self.surname}'
+              f'Фамилия: {self.surname}\n'
         return res
 
 
-some_reviewer = Reviewer('Bob', 'Hoskins')
+some_reviewer = Reviewer('Adrian', 'Paul')
 print(some_reviewer)
 
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.finished_courses += ['Git']
-best_student.courses_in_progress += ['Python', 'GIT']
-best_student.add_courses('GIT')
-#best_student.grades['Git'] = [10, 10, 10, 10, 10]
-#best_student.grades['Python'] = [10, 10]
+student_one = Student('Germiona', 'Granger', 'femail')
+student_one.finished_courses += ['Git']
+student_one.courses_in_progress += ['Python', 'Pascal']
+student_one.add_courses('OOP')
+student_one.grades['Git'] = [10, 20, 30, 40, 10]
+student_one.grades['Python'] = [30, 30]
+print(student_one)
 
-# print(best_student.finished_courses)
-# print(best_student.courses_in_progress)
-# print(best_student.grades)
-# print(best_student.finished_courses)
+student_two = Student('Boby', 'Fisher', 'male')
+student_two.finished_courses += ['Git']
+student_two.courses_in_progress += ['Python', 'Pascal']
+student_two.add_courses('OOP')
+student_two.grades['Git'] = [10, 20, 30, 40, 50]
+student_two.grades['Python'] = [10, 30]
+print(student_two)
 
-cool_lector = Lecturer('Some', 'Buddy')
-cool_reviewer = Reviewer('Some_r', 'Buddy_r')
-cool_reviewer.courses_attached += ['Python']
-cool_lector.courses_attached += ['GIT']
-print(cool_lector.courses_attached)
-best_student.rate_lecturer(cool_lector, 'GIT', 8) # выставляем оценку лектору
-print(cool_lector.grades) # проверяем
-print(cool_lector)
+if student_one.__lt__(student_two):
+    print(f'{student_two.name} {student_two.surname} лучший!\n')
+else:
+    print(f'{student_one.name} {student_one.surname} лучший!\n')
 
-cool_reviewer.rate_hw(best_student, 'Python', 10) # ставим оценку студенту
-# cool_mentor.rate_hw(best_student, 'Python', 20)
-# cool_mentor.rate_hw(cool_mentor, 'GIT', 22)
-# cool_mentor.rate_hw(best_student, 'GIT', 10)
-#
-print(best_student.grades)
-print(best_student)
+lecturer_one = Lecturer('Bob', 'Hoskins')
+lecturer_one.courses_attached += ['Python']
+lecturer_one.courses_attached += ['Pascal']
+student_one.rate_lecturer(lecturer_one, 'Python', 5)
+student_one.rate_lecturer(lecturer_one, 'Pascal', 10)
+student_two.rate_lecturer(lecturer_one, 'Python', 12)
+student_two.rate_lecturer(lecturer_one, 'Pascal', 10)
+# print(lecturer_one.grades)
+print(lecturer_one)
+
+lecturer_two = Lecturer('Ashley', 'Gorrel')
+lecturer_two.courses_attached += ['Python']
+lecturer_two.courses_attached += ['Pascal']
+student_one.rate_lecturer(lecturer_two, 'Python', 5)
+student_one.rate_lecturer(lecturer_two, 'Pascal', 10)
+student_two.rate_lecturer(lecturer_two, 'Python', 13)
+student_two.rate_lecturer(lecturer_two, 'Pascal', 5)
+# print(lecturer_two.grades)
+print(lecturer_two)
+
+if lecturer_one.__lt__(lecturer_two):
+    print(f'{lecturer_two.name} {lecturer_two.surname} лучший!\n')
+else:
+    print(f'{lecturer_one.name} {lecturer_one.surname} лучший!\n')
